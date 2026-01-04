@@ -1,0 +1,17 @@
+{
+  "name": "greyshot-data",
+  "version": "1.0.0",
+  "description": "Community-contributed encounters and data sources for Greyshot",
+  "private": true,
+  "scripts": {
+    "validate": "node scripts/validate.js",
+    "check-duplicates": "node scripts/check-duplicates.js",
+    "validate-all": "npm run check-duplicates && find encounters datasources -name '*.yaml' -o -name '*.yml' | xargs -I {} node scripts/validate.js {}"
+  },
+  "devDependencies": {
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "glob": "^10.3.10",
+    "yaml": "^2.3.4"
+  }
+}

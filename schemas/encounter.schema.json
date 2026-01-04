@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Encounter",
+  "description": "Schema for encounter YAML files",
+  "type": "object",
+  "required": ["version", "type", "title", "startDate", "endDate", "location", "locationApprox", "description", "tags"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version"
+    },
+    "type": {
+      "type": "string",
+      "const": "encounter",
+      "description": "Document type"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 200,
+      "description": "Title of the encounter"
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Start date of the encounter (YYYY-MM-DD)"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date",
+      "description": "End date of the encounter (YYYY-MM-DD)"
+    },
+    "location": {
+      "type": "object",
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "Point"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "[longitude, latitude]"
+        }
+      }
+    },
+    "locationApprox": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Location approximation radius in km"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Detailed description of the encounter"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 50
+      },
+      "minItems": 1,
+      "description": "Tags for categorization"
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url", "description"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://",
+            "description": "HTTPS URL to the media file"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Description of the media"
+          },
+          "license": {
+            "type": "string",
+            "description": "License information (e.g., CC-BY-4.0, Fair Use)"
+          }
+        }
+      },
+      "description": "Optional media attachments"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "mongoId": {
+          "type": ["string", "null"],
+          "description": "MongoDB ObjectId (auto-populated after sync)"
+        },
+        "githubSubmitter": {
+          "type": "string",
+          "description": "GitHub username of the submitter"
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Submission timestamp"
+        }
+      },
+      "description": "Metadata (auto-populated)"
+    }
+  }
+}

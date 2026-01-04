@@ -1,0 +1,41 @@
+version: "1.0"
+type: encounter
+
+title: "Phoenix Lights Mass Sighting (Example)"
+startDate: "1997-03-13"
+endDate: "1997-03-13"
+
+location:
+  type: Point
+  coordinates: [-112.0740, 33.4484]  # [longitude, latitude]
+locationApprox: 50  # km radius - covers the Phoenix metro area
+
+description: |
+  On the evening of March 13, 1997, thousands of people in Phoenix, Arizona
+  and surrounding areas reported seeing a massive V-shaped or triangular
+  formation of lights in the sky.
+
+  The sighting occurred in two distinct phases:
+  1. A triangular formation of lights that moved slowly across the state
+  2. A series of stationary lights that appeared over Phoenix
+
+  Witnesses included pilots, police officers, and ordinary citizens.
+  The event remains one of the most witnessed UFO sightings in history.
+
+  NOTE: This is an example file for demonstration purposes.
+
+tags:
+  - MASS_SIGHTING
+  - LIGHTS
+  - TRIANGLE
+  - ARIZONA
+  - USA
+
+media:
+  - url: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Phoenix_Lights.jpg/1200px-Phoenix_Lights.jpg"
+    description: "Artistic recreation of the Phoenix Lights formation"
+    license: "CC-BY-SA-4.0"
+
+metadata:
+  mongoId: null
+  githubSubmitter: "example-user"

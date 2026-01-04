@@ -1,0 +1,51 @@
+version: "1.0"
+type: datasource
+
+title: "Local News Coverage of Phoenix Lights (Example)"
+publicationDate: "1997-03-14"
+
+description: |
+  Initial local news coverage of the Phoenix Lights incident from
+  the day after the sighting. Includes eyewitness interviews and
+  expert commentary.
+
+  The report features:
+  - Multiple eyewitness accounts from Phoenix residents
+  - Commentary from local astronomers
+  - Footage of the lights (where available)
+  - Official statements from local authorities
+
+  NOTE: This is an example file for demonstration purposes.
+
+encounters:
+  - "encounters/1997/03/phoenix-lights-example.yaml"
+
+tags:
+  - NEWS_REPORT
+  - EYEWITNESS
+  - VIDEO_FOOTAGE
+  - LOCAL_MEDIA
+
+authors:
+  # Example of a platform user author
+  - type: "platform_user"
+    username: "admin"
+
+  # Example of an external author
+  - type: "external"
+    name: "Jane Reporter"
+    affiliation: "KPHO-TV Phoenix"
+
+media:
+  - url: "https://archive.org/details/example-phoenix-lights-news"
+    description: "Original news broadcast from March 14, 1997"
+    license: "Fair Use"
+
+externalLinks:
+  - url: "https://en.wikipedia.org/wiki/Phoenix_Lights"
+    type: "related"
+    description: "Wikipedia article on the Phoenix Lights"
+
+metadata:
+  mongoId: null
+  githubSubmitter: "example-user"

@@ -1,0 +1,174 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DataSource",
+  "description": "Schema for data source YAML files",
+  "type": "object",
+  "required": ["version", "type", "title", "publicationDate", "description", "encounters", "tags", "authors"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version"
+    },
+    "type": {
+      "type": "string",
+      "const": "datasource",
+      "description": "Document type"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 100,
+      "description": "Title of the data source"
+    },
+    "publicationDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Publication date (YYYY-MM-DD)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Detailed description of the data source"
+    },
+    "encounters": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^encounters/.*\\.(yaml|yml)$",
+        "description": "Path to related encounter YAML file"
+      },
+      "minItems": 1,
+      "description": "Related encounters (file paths)"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 50
+      },
+      "minItems": 1,
+      "description": "Tags for categorization"
+    },
+    "authors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["platform_user", "external", "admin_placeholder"],
+            "description": "Author type"
+          },
+          "username": {
+            "type": "string",
+            "description": "Platform username (for platform_user type)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Author name (for external type)"
+          },
+          "affiliation": {
+            "type": "string",
+            "description": "Organization or affiliation (for external type)"
+          },
+          "claimToken": {
+            "type": "string",
+            "description": "Token for claiming authorship (auto-generated for external)"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Reason for placeholder (for admin_placeholder type)"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "type": { "const": "platform_user" } }
+            },
+            "then": {
+              "required": ["username"]
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "external" } }
+            },
+            "then": {
+              "required": ["name"]
+            }
+          }
+        ]
+      },
+      "minItems": 1,
+      "description": "Authors of the data source"
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url", "description"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://",
+            "description": "HTTPS URL to the media file"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Description of the media"
+          },
+          "license": {
+            "type": "string",
+            "description": "License information"
+          }
+        }
+      },
+      "description": "Optional media attachments"
+    },
+    "externalLinks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["archive", "source", "related", "other"]
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "External reference links"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "mongoId": {
+          "type": ["string", "null"],
+          "description": "MongoDB ObjectId (auto-populated after sync)"
+        },
+        "githubSubmitter": {
+          "type": "string",
+          "description": "GitHub username of the submitter"
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Submission timestamp"
+        }
+      },
+      "description": "Metadata (auto-populated)"
+    }
+  }
+}
