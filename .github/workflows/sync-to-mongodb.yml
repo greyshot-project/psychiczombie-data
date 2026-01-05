@@ -1,0 +1,131 @@
+name: Sync to MongoDB
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  sync:
+    # Only run if the PR was merged (not just closed)
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need full history to diff
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get merged files
+        id: merged-files
+        run: |
+          # Get files changed in the merged PR
+          FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} | grep -E '(encounters|datasources)/.*\.(yaml|yml)$' || true)
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "Found files: $FILES"
+
+      - name: Sync files to MongoDB
+        if: steps.merged-files.outputs.files != ''
+        env:
+          GREYSHOT_API_URL: ${{ secrets.GREYSHOT_API_URL }}
+          GREYSHOT_WEBHOOK_SECRET: ${{ secrets.GREYSHOT_WEBHOOK_SECRET }}
+          # IMPORTANT: Change this to "production" for the greyshot-data repo
+          ENVIRONMENT: "test"
+        run: |
+          echo "Syncing files to MongoDB..."
+
+          # Read the list of files
+          while IFS= read -r file; do
+            if [ -n "$file" ] && [ -f "$file" ]; then
+              echo "Syncing: $file"
+
+              # Determine if this is a new file or an edit
+              if git diff --name-only --diff-filter=A ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} | grep -q "^$file$"; then
+                IS_NEW="true"
+              else
+                IS_NEW="false"
+              fi
+
+              # Read file content
+              CONTENT=$(cat "$file")
+
+              # Call the sync API
+              RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$GREYSHOT_API_URL/api/contributions/sync" \
+                -H "Content-Type: application/json" \
+                -H "x-api-secret: $GREYSHOT_WEBHOOK_SECRET" \
+                -d @- <<PAYLOAD
+              {
+                "filePath": "$file",
+                "yamlContent": $(echo "$CONTENT" | jq -Rs .),
+                "prNumber": ${{ github.event.pull_request.number }},
+                "prUrl": "${{ github.event.pull_request.html_url }}",
+                "githubUsername": "${{ github.event.pull_request.user.login }}",
+                "mergedAt": "${{ github.event.pull_request.merged_at }}",
+                "isNew": $IS_NEW,
+                "environment": "$ENVIRONMENT"
+              }
+          PAYLOAD
+              )
+
+              # Extract HTTP status code (last line)
+              HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+              BODY=$(echo "$RESPONSE" | sed '$d')
+
+              if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+                echo "✅ Successfully synced: $file"
+                echo "Response: $BODY"
+
+                # Extract mongoId from response and update the YAML file
+                MONGO_ID=$(echo "$BODY" | jq -r '.mongoId // empty')
+                if [ -n "$MONGO_ID" ]; then
+                  echo "MongoDB ID: $MONGO_ID"
+                fi
+              else
+                echo "❌ Failed to sync: $file (HTTP $HTTP_CODE)"
+                echo "Response: $BODY"
+                exit 1
+              fi
+            fi
+          done <<< "${{ steps.merged-files.outputs.files }}"
+
+      - name: Update YAML files with MongoDB IDs
+        if: steps.merged-files.outputs.files != ''
+        run: |
+          echo "Updating YAML files with MongoDB IDs..."
+          # This step would update the metadata.mongoId field in each YAML file
+          # For now, we'll skip this to keep things simple
+          # You can implement this later if needed
+
+      - name: Commit updated files (if any)
+        if: steps.merged-files.outputs.files != ''
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: Update MongoDB IDs after sync [skip ci]"
+          file_pattern: "encounters/**/*.yaml encounters/**/*.yml datasources/**/*.yaml datasources/**/*.yml"
+          skip_dirty_check: false
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**PR:** #${{ github.event.pull_request.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Merged by:** ${{ github.event.pull_request.user.login }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ env.ENVIRONMENT || 'test' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ All files synced successfully!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some files failed to sync. Check the logs above." >> $GITHUB_STEP_SUMMARY
+          fi

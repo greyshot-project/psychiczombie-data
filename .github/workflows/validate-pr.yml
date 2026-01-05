@@ -1,0 +1,72 @@
+name: Validate PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'encounters/**/*.yaml'
+      - 'encounters/**/*.yml'
+      - 'datasources/**/*.yaml'
+      - 'datasources/**/*.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            encounters/**/*.yaml
+            encounters/**/*.yml
+            datasources/**/*.yaml
+            datasources/**/*.yml
+
+      - name: Validate YAML files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          echo "Validating changed files..."
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "Validating: $file"
+            node scripts/validate.js "$file"
+          done
+
+      - name: Check for duplicate entries
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: node scripts/check-duplicates.js
+
+      - name: Add success comment
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ **Validation passed!**\n\nAll YAML files are valid and ready for review.'
+            })
+
+      - name: Add failure comment
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ **Validation failed!**\n\nPlease check the workflow logs for details on what needs to be fixed.'
+            })
