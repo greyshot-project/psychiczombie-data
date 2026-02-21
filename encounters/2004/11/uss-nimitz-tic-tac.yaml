@@ -1,0 +1,50 @@
+version: "1.0"
+type: encounter
+
+title: "USS Nimitz Tic Tac Encounter"
+startDate: "2004-11-14"
+endDate: "2004-11-14"
+
+location:
+  type: Point
+  coordinates: [-118.5, 31.5]
+locationApprox: 100
+
+description: |
+  On November 14, 2004, during training exercises off the coast of Southern
+  California, the USS Princeton (part of the USS Nimitz Carrier Strike Group)
+  detected anomalous aerial vehicles on radar. The objects had been tracked
+  intermittently for two weeks, appearing at 80,000 feet before dropping to
+  the surface in seconds.
+
+  Commander David Fravor and Lt. Commander Alex Dietrich were vectored to
+  investigate in their F/A-18F Super Hornets. They observed a white, oblong
+  object approximately 40 feet long, shaped like a Tic Tac, hovering above a
+  disturbance in the water. The object demonstrated extraordinary flight
+  characteristics — no visible propulsion, no wings, no exhaust plume.
+
+  When Fravor descended to investigate, the object ascended to meet him,
+  mirrored his movements, then accelerated away at incredible speed. A second
+  jet equipped with a FLIR pod later captured the object on infrared video,
+  now known as the "FLIR1" footage.
+
+  This encounter was confirmed by the Pentagon in 2017 as part of the
+  Advanced Aerospace Threat Identification Program (AATIP) disclosure.
+
+tags:
+  - MILITARY
+  - NAVY
+  - RADAR
+  - VISUAL
+  - INFRARED
+  - USA
+  - CALIFORNIA
+
+media:
+  - url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/USS_Nimitz_%28CVN-68%29.jpg/1200px-USS_Nimitz_%28CVN-68%29.jpg"
+    description: "USS Nimitz (CVN-68) aircraft carrier"
+    license: "Public Domain"
+
+metadata:
+  submittedAt: "2026-02-21T21:00:00Z"
+  submittedBy: "yami-pipeline-test"
