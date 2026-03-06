@@ -1,0 +1,41 @@
+version: "1.0"
+type: datasource
+
+title: "USS Nimitz FLIR1 Infrared Footage (2004)"
+publicationDate: "2017-12-16"
+
+description: |
+  The FLIR1 video, recorded on November 14, 2004 by the weapons systems 
+  officer aboard an F/A-18F Super Hornet from the USS Nimitz carrier 
+  strike group, captures infrared footage of an unidentified aerial 
+  phenomenon off the coast of Southern California.
+
+  The object appears as a white, oblong shape on the FLIR sensor, 
+  demonstrating no visible propulsion, no wings, and extraordinary 
+  maneuverability. The video was officially released by the Pentagon 
+  in April 2020 as part of a package of UAP-related materials.
+
+  Originally leaked in 2007, it gained widespread attention after 
+  The New York Times published an investigative piece in December 2017 
+  alongside the announcement of the Advanced Aerospace Threat 
+  Identification Program (AATIP).
+
+encounters:
+  - "encounters/2004/11/uss-nimitz-tic-tac.yaml"
+
+tags:
+  - MILITARY
+  - NAVY
+  - VIDEO_FOOTAGE
+  - INFRARED
+  - DECLASSIFIED
+  - USA
+
+authors:
+  - type: admin_placeholder
+    reason: "Original footage attributed to U.S. Navy personnel"
+
+media:
+  - url: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/2004_USS_Nimitz_FLIR1.jpg/640px-2004_USS_Nimitz_FLIR1.jpg"
+    description: "Still frame from the FLIR1 infrared footage"
+    license: "Public Domain (U.S. Government)"
