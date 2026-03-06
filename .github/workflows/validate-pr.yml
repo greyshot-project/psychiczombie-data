@@ -9,6 +9,9 @@ on:
       - 'datasources/**/*.yaml'
       - 'datasources/**/*.yml'
 
+permissions:
+  pull-requests: write
+
 jobs:
   validate:
     runs-on: ubuntu-latest
