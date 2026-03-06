@@ -1,0 +1,42 @@
+version: "1.0"
+type: datasource
+
+title: "Unidentified Anomalous Phenomena Disclosure Act of 2024"
+publicationDate: "2024-12-23"
+
+description: |
+  The UAP Disclosure Act of 2024 (UAPDA) was enacted as part of the 
+  National Defense Authorization Act for Fiscal Year 2025, signed into 
+  law on December 23, 2024.
+
+  The act established a framework for the declassification and release 
+  of government records related to unidentified anomalous phenomena. 
+  Key provisions include:
+
+  - Creation of a UAP Records Collection at the National Archives
+  - Mandatory review of classified UAP-related records by executive agencies
+  - A presumption of disclosure — records must be released unless 
+    specific harm can be demonstrated
+  - Establishment of a UAP Records Review Board with authority to 
+    order declassification
+
+  The legislation was modeled on the JFK Records Act and represented 
+  the most significant legislative action on UAP transparency in 
+  U.S. history.
+
+encounters: []
+
+tags:
+  - LEGISLATION
+  - DISCLOSURE
+  - USA
+  - GOVERNMENT
+
+authors:
+  - type: admin_placeholder
+    reason: "U.S. Congress — public legislative record"
+
+externalLinks:
+  - url: "https://www.congress.gov/bill/118th-congress/senate-bill/2418"
+    type: source
+    description: "Congress.gov — UAP Disclosure Act text"
