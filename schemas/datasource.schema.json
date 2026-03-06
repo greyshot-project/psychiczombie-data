@@ -3,7 +3,15 @@
   "title": "DataSource",
   "description": "Schema for data source YAML files",
   "type": "object",
-  "required": ["version", "type", "title", "publicationDate", "description", "encounters", "tags", "authors"],
+  "required": [
+    "version",
+    "type",
+    "title",
+    "publicationDate",
+    "description",
+    "tags",
+    "authors"
+  ],
   "properties": {
     "version": {
       "type": "string",
@@ -38,8 +46,7 @@
         "pattern": "^encounters/.*\\.(yaml|yml)$",
         "description": "Path to related encounter YAML file"
       },
-      "minItems": 1,
-      "description": "Related encounters (file paths)"
+      "description": "Related encounters (file paths). Optional \u2014 data sources may exist without a specific encounter (e.g. legislative records, broad disclosure documents)."
     },
     "tags": {
       "type": "array",
@@ -55,11 +62,17 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["type"],
+        "required": [
+          "type"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["platform_user", "external", "admin_placeholder"],
+            "enum": [
+              "platform_user",
+              "external",
+              "admin_placeholder"
+            ],
             "description": "Author type"
           },
           "username": {
@@ -86,18 +99,30 @@
         "allOf": [
           {
             "if": {
-              "properties": { "type": { "const": "platform_user" } }
+              "properties": {
+                "type": {
+                  "const": "platform_user"
+                }
+              }
             },
             "then": {
-              "required": ["username"]
+              "required": [
+                "username"
+              ]
             }
           },
           {
             "if": {
-              "properties": { "type": { "const": "external" } }
+              "properties": {
+                "type": {
+                  "const": "external"
+                }
+              }
             },
             "then": {
-              "required": ["name"]
+              "required": [
+                "name"
+              ]
             }
           }
         ]
@@ -109,7 +134,10 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["url", "description"],
+        "required": [
+          "url",
+          "description"
+        ],
         "properties": {
           "url": {
             "type": "string",
@@ -134,7 +162,9 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["url"],
+        "required": [
+          "url"
+        ],
         "properties": {
           "url": {
             "type": "string",
@@ -142,7 +172,12 @@
           },
           "type": {
             "type": "string",
-            "enum": ["archive", "source", "related", "other"]
+            "enum": [
+              "archive",
+              "source",
+              "related",
+              "other"
+            ]
           },
           "description": {
             "type": "string"
@@ -155,7 +190,10 @@
       "type": "object",
       "properties": {
         "mongoId": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "MongoDB ObjectId (auto-populated after sync)"
         },
         "githubSubmitter": {

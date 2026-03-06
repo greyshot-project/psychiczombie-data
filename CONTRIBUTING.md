@@ -83,7 +83,7 @@ Go to your fork on GitHub and click "New Pull Request".
 | `title` | Yes | Clear, descriptive title (5-100 chars) |
 | `publicationDate` | Yes | YYYY-MM-DD format |
 | `description` | Yes | Detailed description (min 20 chars) |
-| `encounters` | Yes | At least one encounter file path |
+| `encounters` | No | Related encounter file paths (optional — omit for standalone docs) |
 | `authors` | Yes | At least one author |
 | `tags` | Yes | At least one tag |
 | `media` | No | Optional media attachments |
